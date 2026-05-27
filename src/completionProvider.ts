@@ -111,13 +111,18 @@ export class TinyInlineCompletionProvider implements vscode.InlineCompletionItem
       return [new vscode.InlineCompletionItem(cached)];
     }
 
+    const suffixEmpty = !ctx.suffix.trim();
+    const tokens = suffixEmpty
+      ? Math.floor(config.maxTokens / 2)
+      : config.maxTokens;
+
     try {
       const stream = resolved.stream(resolved.config, {
         prefix: ctx.prefix,
         suffix: ctx.suffix,
         fileName: document.fileName,
         language: document.languageId,
-      }, config.maxTokens, signal);
+      }, tokens, signal);
 
       const filtered = filterStream(stream, ctx.prefix, ctx.suffix);
 
@@ -127,7 +132,7 @@ export class TinyInlineCompletionProvider implements vscode.InlineCompletionItem
         fullText += chunk;
       }
 
-      const processed = postProcess(fullText, ctx.prefix, ctx.suffix);
+      const processed = postProcess(fullText, ctx.prefix, ctx.suffix, config.maxLines);
 
       if (processed && processed.length > 0) {
         setCache(ctx.prefix, ctx.suffix, processed);

@@ -42,8 +42,7 @@ export async function* streamDeepseek(
     prompt: request.prefix,
     suffix: request.suffix,
     max_tokens: maxTokens,
-    temperature: 0.1,
-    top_p: 0.95,
+    temperature: 0,
     stop: STOP_TOKENS,
     stream: true,
   });

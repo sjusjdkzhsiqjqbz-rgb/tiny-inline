@@ -16,10 +16,23 @@ function makeHeaders(config: ProviderConfig): Record<string, string> {
 }
 
 function buildFimChatPrompt(prefix: string, suffix: string): string {
-  const trimmedPrefix = prefix.slice(-4000);
-  const trimmedSuffix = suffix.slice(0, 4000);
+  const trimmedPrefix = prefix.slice(-2000);
+  const trimmedSuffix = suffix.slice(0, 2000);
+  const suffixIsEmpty = !trimmedSuffix.trim();
+
+  if (suffixIsEmpty) {
+    return `You are a code autocomplete engine. Continue the code below by writing ONLY the very next 1-3 lines.
+Do NOT write entire function bodies. Do NOT invent new functions or types.
+Return ONLY the continuation — no markdown, no backticks, no commentary.
+
+Code:
+${trimmedPrefix}
+
+Next lines:`;
+  }
+
   return `You are a code completion engine. Return ONLY the code that goes between the prefix and suffix.
-Do not repeat the prefix or suffix. Do not add explanations.
+Output ONLY 1-3 lines. Do not repeat the prefix or suffix. Do not add explanations.
 
 <PREFIX>
 ${trimmedPrefix}
@@ -75,8 +88,8 @@ export async function* streamNativeFim(
     prompt: request.prefix,
     suffix: request.suffix,
     max_tokens: maxTokens,
-    temperature: 0.1,
-    stop: ['<PRE>', '<SUF>', '<MID>', '<EOT>', ' <file_sep>'],
+    temperature: 0,
+    stop: ['<PRE>', '<SUF>', '<MID>', '<EOT>', ' <file_sep>', '\n\n\n'],
     stream: true,
   });
 
@@ -137,8 +150,8 @@ export async function* streamChat(
       { role: 'user', content: '<|middle|>' },
     ],
     max_tokens: maxTokens,
-    temperature: 0.1,
-    stop: ['<PRE>', '<SUF>', '<MID>', '<EOT>'],
+    temperature: 0,
+    stop: ['<PRE>', '<SUF>', '<MID>', '<EOT>', '\n\n\n'],
     stream: true,
   });
 

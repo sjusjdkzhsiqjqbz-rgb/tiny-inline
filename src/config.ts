@@ -9,6 +9,7 @@ export function getTinyInlineConfig(): TinyInlineConfig {
     activeProvider: c.get<string>('activeProvider', 'deepseek'),
     debounceMs: c.get<number>('debounceMs', 150),
     maxTokens: c.get<number>('maxTokens', 256),
+    maxLines: c.get<number>('maxLines', 3),
     contextWindow: c.get<number>('contextWindow', 2048),
   };
 }

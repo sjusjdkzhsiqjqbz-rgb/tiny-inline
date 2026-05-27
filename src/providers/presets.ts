@@ -96,5 +96,6 @@ export interface TinyInlineConfig {
   activeProvider: string;
   debounceMs: number;
   maxTokens: number;
+  maxLines: number;
   contextWindow: number;
 }

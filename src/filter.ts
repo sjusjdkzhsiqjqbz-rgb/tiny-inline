@@ -2,10 +2,6 @@ import { LruCache } from './cache';
 
 const completionCache = new LruCache(200);
 
-const LINE_COMPLETION_ENDINGS = new Set([
-  ';', '}', '{', ']', ')', ',', '.', ':',
-]);
-
 export function getCached(prefix: string, suffix: string): string | undefined {
   const key = hashKey(prefix, suffix);
   return completionCache.get(key);
@@ -24,7 +20,7 @@ export function filterStream(
   return filterGenerator(generator, prefix, suffix);
 }
 
-export function postProcess(completion: string, prefix: string, suffix: string): string {
+export function postProcess(completion: string, prefix: string, suffix: string, maxLines: number = 3): string {
   if (!completion) return '';
 
   let result = completion;
@@ -46,17 +42,37 @@ export function postProcess(completion: string, prefix: string, suffix: string):
   }
 
   result = result.replace(/^```[\w]*\n?/gm, '').replace(/```$/gm, '');
-  result = result.replace(/(\/\/|#|--)\s*FIM-GUIDE.*$/gm, '');
   result = result.replace(/<PRE>|<SUF>|<MID>|<EOT>/gi, '');
 
-  if (result.length > 2) {
-    const firstLineEnd = result.indexOf('\n');
-    if (firstLineEnd === -1 || firstLineEnd > 500) {
-      const trimmed = result.trimEnd();
-      if (trimmed.length >= 2 && LINE_COMPLETION_ENDINGS.has(trimmed.slice(-1))) {
-        result = trimmed;
-      } else if (firstLineEnd > 0) {
-        result = result.slice(0, firstLineEnd);
+  const suffixEmpty = !suffix.trim();
+  const lines = result.split('\n');
+
+  if (suffixEmpty && lines.length > maxLines) {
+    result = lines.slice(0, maxLines).join('\n');
+  }
+
+  if (suffixEmpty) {
+    const declarationPatterns = [
+      /^\s*(public\s+|private\s+|protected\s+)?func\s+\w+\s*\(/m,
+      /^\s*(public\s+|private\s+|protected\s+)?(class|struct|interface|enum)\s+\w+/m,
+      /^\s*def\s+\w+\s*\(/m,
+      /^\s*export\s+(default\s+)?(function|class|const\s+\w+\s*=\s*(\(|function))/m,
+      /^\s*type\s+\w+\s+/m,
+    ];
+
+    const hasNewDeclaration = declarationPatterns.some(p => p.test(result));
+    const prefixHasDeclaration = declarationPatterns.some(p => p.test(prefix));
+
+    if (hasNewDeclaration && !prefixHasDeclaration && result.includes('\n')) {
+      const trimmedLines = lines.filter(line => {
+        const t = line.trim();
+        if (!t) return false;
+        return !declarationPatterns.some(p => p.test(line));
+      });
+      if (trimmedLines.length > 0) {
+        result = trimmedLines.slice(0, maxLines).join('\n');
+      } else {
+        result = lines[0];
       }
     }
   }

@@ -3,10 +3,21 @@ import type { ProviderConfig, CompletionRequest } from './types';
 const STOP_TOKENS = ['<PRE>', '<SUF>', '<MID>', '<EOT>'];
 
 function buildFimPrompt(prefix: string, suffix: string): string {
-  const trimmedPrefix = prefix.slice(-4000);
-  const trimmedSuffix = suffix.slice(0, 4000);
-  return `You are a code completion engine. Return ONLY the code that goes between the prefix and suffix.
-Do not repeat the prefix or suffix. Do not add explanations.
+  const trimmedPrefix = prefix.slice(-2000);
+  const trimmedSuffix = suffix.slice(0, 2000);
+  const suffixIsEmpty = !trimmedSuffix.trim();
+
+  if (suffixIsEmpty) {
+    return `Continue the code below by writing ONLY the very next 1-3 lines.
+Do NOT write entire function bodies. Do NOT invent new functions or types.
+
+Code:
+${trimmedPrefix}
+
+Next lines:`;
+  }
+
+  return `Fill the gap. Return ONLY the code between prefix and suffix (1-3 lines max).
 
 <PREFIX>
 ${trimmedPrefix}
@@ -16,7 +27,7 @@ ${trimmedPrefix}
 ${trimmedSuffix}
 </SUFFIX>
 
-Return only the missing code at cursor position:`;
+Missing code:`;
 }
 
 export async function testAnthropic(config: ProviderConfig): Promise<boolean> {
@@ -51,7 +62,7 @@ export async function* streamAnthropic(
   const body = JSON.stringify({
     model: config.model,
     max_tokens: maxTokens,
-    temperature: 0.1,
+    temperature: 0,
     stop_sequences: STOP_TOKENS,
     system: 'You are a code completion engine. Output ONLY the code. No explanations, no markdown, no backticks.',
     messages: [{ role: 'user', content: prompt }],

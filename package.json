@@ -46,6 +46,11 @@
           "default": 256,
           "description": "Maximum tokens in the generated completion"
         },
+        "tiny-inline.maxLines": {
+          "type": "number",
+          "default": 3,
+          "description": "Maximum lines in a completion. Longer completions are truncated."
+        },
         "tiny-inline.contextWindow": {
           "type": "number",
           "default": 2048,
