@@ -126,6 +126,111 @@
           "default": "http://localhost:11434",
           "description": "Ollama API base URL"
         },
+        "tiny-inline.providers.groq.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Groq API key"
+        },
+        "tiny-inline.providers.groq.model": {
+          "type": "string",
+          "default": "qwen-qwq-32b",
+          "description": "Groq model for completions"
+        },
+        "tiny-inline.providers.groq.baseUrl": {
+          "type": "string",
+          "default": "https://api.groq.com/openai/v1",
+          "description": "Groq API base URL"
+        },
+        "tiny-inline.providers.deepinfra.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "DeepInfra API key"
+        },
+        "tiny-inline.providers.deepinfra.model": {
+          "type": "string",
+          "default": "deepseek-ai/DeepSeek-V3",
+          "description": "DeepInfra model for completions"
+        },
+        "tiny-inline.providers.deepinfra.baseUrl": {
+          "type": "string",
+          "default": "https://api.deepinfra.com/v1/openai",
+          "description": "DeepInfra API base URL"
+        },
+        "tiny-inline.providers.together.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Together AI API key"
+        },
+        "tiny-inline.providers.together.model": {
+          "type": "string",
+          "default": "Qwen/Qwen2.5-Coder-32B-Instruct",
+          "description": "Together AI model for completions"
+        },
+        "tiny-inline.providers.together.baseUrl": {
+          "type": "string",
+          "default": "https://api.together.xyz/v1",
+          "description": "Together AI API base URL"
+        },
+        "tiny-inline.providers.fireworks.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Fireworks AI API key"
+        },
+        "tiny-inline.providers.fireworks.model": {
+          "type": "string",
+          "default": "accounts/fireworks/models/qwen2p5-coder-32b-instruct",
+          "description": "Fireworks AI model for completions"
+        },
+        "tiny-inline.providers.fireworks.baseUrl": {
+          "type": "string",
+          "default": "https://api.fireworks.ai/inference/v1",
+          "description": "Fireworks AI API base URL"
+        },
+        "tiny-inline.providers.mistral.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Mistral API key"
+        },
+        "tiny-inline.providers.mistral.model": {
+          "type": "string",
+          "default": "codestral-latest",
+          "description": "Mistral model for completions"
+        },
+        "tiny-inline.providers.mistral.baseUrl": {
+          "type": "string",
+          "default": "https://api.mistral.ai/v1",
+          "description": "Mistral API base URL"
+        },
+        "tiny-inline.providers.xai.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "xAI API key"
+        },
+        "tiny-inline.providers.xai.model": {
+          "type": "string",
+          "default": "grok-3-mini",
+          "description": "xAI model for completions"
+        },
+        "tiny-inline.providers.xai.baseUrl": {
+          "type": "string",
+          "default": "https://api.x.ai/v1",
+          "description": "xAI API base URL"
+        },
+        "tiny-inline.providers.lmstudio.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "LM Studio API key (optional)"
+        },
+        "tiny-inline.providers.lmstudio.model": {
+          "type": "string",
+          "default": "local-model",
+          "description": "LM Studio model identifier"
+        },
+        "tiny-inline.providers.lmstudio.baseUrl": {
+          "type": "string",
+          "default": "http://localhost:1234/v1",
+          "description": "LM Studio API base URL"
+        },
         "tiny-inline.customProviders": {
           "type": "array",
           "default": [],

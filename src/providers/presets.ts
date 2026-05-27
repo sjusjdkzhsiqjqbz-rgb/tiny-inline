@@ -80,6 +80,97 @@ export const PRESETS: Record<string, Preset> = {
       baseUrl: 'http://localhost:11434',
     },
   },
+  'groq': {
+    id: 'groq',
+    fimNative: false,
+    configKeys: {
+      apiKey: 'tiny-inline.providers.groq.apiKey',
+      model: 'tiny-inline.providers.groq.model',
+      baseUrl: 'tiny-inline.providers.groq.baseUrl',
+    },
+    defaults: {
+      model: 'qwen-qwq-32b',
+      baseUrl: 'https://api.groq.com/openai/v1',
+    },
+  },
+  'deepinfra': {
+    id: 'deepinfra',
+    fimNative: false,
+    configKeys: {
+      apiKey: 'tiny-inline.providers.deepinfra.apiKey',
+      model: 'tiny-inline.providers.deepinfra.model',
+      baseUrl: 'tiny-inline.providers.deepinfra.baseUrl',
+    },
+    defaults: {
+      model: 'deepseek-ai/DeepSeek-V3',
+      baseUrl: 'https://api.deepinfra.com/v1/openai',
+    },
+  },
+  'together': {
+    id: 'together',
+    fimNative: false,
+    configKeys: {
+      apiKey: 'tiny-inline.providers.together.apiKey',
+      model: 'tiny-inline.providers.together.model',
+      baseUrl: 'tiny-inline.providers.together.baseUrl',
+    },
+    defaults: {
+      model: 'Qwen/Qwen2.5-Coder-32B-Instruct',
+      baseUrl: 'https://api.together.xyz/v1',
+    },
+  },
+  'fireworks': {
+    id: 'fireworks',
+    fimNative: false,
+    configKeys: {
+      apiKey: 'tiny-inline.providers.fireworks.apiKey',
+      model: 'tiny-inline.providers.fireworks.model',
+      baseUrl: 'tiny-inline.providers.fireworks.baseUrl',
+    },
+    defaults: {
+      model: 'accounts/fireworks/models/qwen2p5-coder-32b-instruct',
+      baseUrl: 'https://api.fireworks.ai/inference/v1',
+    },
+  },
+  'mistral': {
+    id: 'mistral',
+    fimNative: false,
+    configKeys: {
+      apiKey: 'tiny-inline.providers.mistral.apiKey',
+      model: 'tiny-inline.providers.mistral.model',
+      baseUrl: 'tiny-inline.providers.mistral.baseUrl',
+    },
+    defaults: {
+      model: 'codestral-latest',
+      baseUrl: 'https://api.mistral.ai/v1',
+    },
+  },
+  'xai': {
+    id: 'xai',
+    fimNative: false,
+    configKeys: {
+      apiKey: 'tiny-inline.providers.xai.apiKey',
+      model: 'tiny-inline.providers.xai.model',
+      baseUrl: 'tiny-inline.providers.xai.baseUrl',
+    },
+    defaults: {
+      model: 'grok-3-mini',
+      baseUrl: 'https://api.x.ai/v1',
+    },
+  },
+  'lmstudio': {
+    id: 'lmstudio',
+    fimNative: false,
+    configKeys: {
+      apiKey: '',
+      model: 'tiny-inline.providers.lmstudio.model',
+      baseUrl: 'tiny-inline.providers.lmstudio.baseUrl',
+    },
+    defaults: {
+      model: 'local-model',
+      baseUrl: 'http://localhost:1234/v1',
+    },
+  },
 };
 
 export interface CustomProvider {

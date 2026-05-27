@@ -16,6 +16,11 @@ export interface ResolvedProvider {
   stream: CompletionStreamer;
 }
 
+const CHAT_PRESETS = new Set([
+  'opencode-zen', 'openai', 'ollama',
+  'groq', 'deepinfra', 'together', 'fireworks', 'mistral', 'xai', 'lmstudio',
+]);
+
 export function resolveProvider(name: string): ResolvedProvider | null {
   const config = resolveProviderConfig(name);
   if (!config) return null;
@@ -23,22 +28,14 @@ export function resolveProvider(name: string): ResolvedProvider | null {
   let stream: CompletionStreamer;
 
   if (config.type === 'preset') {
-    switch (config.name) {
-      case 'deepseek':
-        stream = streamDeepseek;
-        break;
-      case 'opencode-zen':
-        stream = streamChat;
-        break;
-      case 'anthropic':
-        stream = streamAnthropic;
-        break;
-      case 'openai':
-      case 'ollama':
-        stream = streamChat;
-        break;
-      default:
-        return null;
+    if (config.name === 'deepseek') {
+      stream = streamDeepseek;
+    } else if (config.name === 'anthropic') {
+      stream = streamAnthropic;
+    } else if (CHAT_PRESETS.has(config.name)) {
+      stream = streamChat;
+    } else {
+      return null;
     }
   } else {
     stream = config.fimNative ? streamNativeFim : streamChat;
@@ -48,16 +45,5 @@ export function resolveProvider(name: string): ResolvedProvider | null {
 }
 
 export async function resolveWithFallback(name: string): Promise<ResolvedProvider | null> {
-  const resolved = resolveProvider(name);
-  if (!resolved) return null;
-
-  if (resolved.config.fimNative) {
-    return resolved;
-  }
-
-  if (resolved.config.type === 'custom') {
-    return resolved;
-  }
-
-  return resolved;
+  return resolveProvider(name);
 }
