@@ -1,0 +1,194 @@
+{
+  "name": "tiny-inline",
+  "displayName": "Tiny Inline",
+  "description": "Minimal AI inline code completions for VSCodium with custom provider support",
+  "version": "0.1.0",
+  "publisher": "tiny-inline",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sjusjdkzhsiqjqbz-rgb/tiny-inline"
+  },
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Programming Languages",
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Tiny Inline",
+      "properties": {
+        "tiny-inline.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable inline code completions"
+        },
+        "tiny-inline.activeProvider": {
+          "type": "string",
+          "default": "deepseek",
+          "description": "Active provider for completions. Use preset ID (deepseek, opencode-zen, anthropic, openai, ollama) or a custom provider's name."
+        },
+        "tiny-inline.debounceMs": {
+          "type": "number",
+          "default": 150,
+          "description": "Debounce delay in milliseconds before requesting a completion"
+        },
+        "tiny-inline.maxTokens": {
+          "type": "number",
+          "default": 256,
+          "description": "Maximum tokens in the generated completion"
+        },
+        "tiny-inline.contextWindow": {
+          "type": "number",
+          "default": 2048,
+          "description": "Maximum characters of document context to include (before and after cursor)"
+        },
+        "tiny-inline.providers.deepseek.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "DeepSeek API key"
+        },
+        "tiny-inline.providers.deepseek.model": {
+          "type": "string",
+          "default": "deepseek-coder",
+          "description": "DeepSeek model for completions"
+        },
+        "tiny-inline.providers.deepseek.baseUrl": {
+          "type": "string",
+          "default": "https://api.deepseek.com",
+          "description": "DeepSeek API base URL"
+        },
+        "tiny-inline.providers.opencodeZen.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "OpenCode Zen API key"
+        },
+        "tiny-inline.providers.opencodeZen.model": {
+          "type": "string",
+          "default": "deepseek-v4-pro",
+          "description": "OpenCode Zen model for completions"
+        },
+        "tiny-inline.providers.opencodeZen.baseUrl": {
+          "type": "string",
+          "default": "https://opencode.ai/zen/go/v1",
+          "description": "OpenCode Zen API base URL"
+        },
+        "tiny-inline.providers.anthropic.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Anthropic API key"
+        },
+        "tiny-inline.providers.anthropic.model": {
+          "type": "string",
+          "default": "claude-sonnet-4-20250514",
+          "description": "Anthropic model for completions"
+        },
+        "tiny-inline.providers.anthropic.baseUrl": {
+          "type": "string",
+          "default": "https://api.anthropic.com",
+          "description": "Anthropic API base URL"
+        },
+        "tiny-inline.providers.openai.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "OpenAI API key"
+        },
+        "tiny-inline.providers.openai.model": {
+          "type": "string",
+          "default": "gpt-4o",
+          "description": "OpenAI model for completions"
+        },
+        "tiny-inline.providers.openai.baseUrl": {
+          "type": "string",
+          "default": "https://api.openai.com",
+          "description": "OpenAI API base URL"
+        },
+        "tiny-inline.providers.ollama.model": {
+          "type": "string",
+          "default": "qwen2.5-coder:7b",
+          "description": "Ollama model for completions"
+        },
+        "tiny-inline.providers.ollama.baseUrl": {
+          "type": "string",
+          "default": "http://localhost:11434",
+          "description": "Ollama API base URL"
+        },
+        "tiny-inline.customProviders": {
+          "type": "array",
+          "default": [],
+          "description": "Custom OpenAI-compatible providers",
+          "items": {
+            "type": "object",
+            "required": ["name", "baseUrl", "model"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Display name for this provider (used as activeProvider value)"
+              },
+              "baseUrl": {
+                "type": "string",
+                "description": "Base URL of the API (e.g. https://api.example.com/v1)"
+              },
+              "apiKey": {
+                "type": "string",
+                "description": "API key"
+              },
+              "model": {
+                "type": "string",
+                "description": "Model identifier"
+              },
+              "fimNative": {
+                "type": "boolean",
+                "default": false,
+                "description": "Whether the provider has native FIM support (prompt+suffix parameters)"
+              },
+              "authType": {
+                "type": "string",
+                "enum": ["bearer", "x-api-key", "none"],
+                "default": "bearer",
+                "description": "Authentication type"
+              }
+            }
+          }
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "tiny-inline.toggle",
+        "title": "Tiny Inline: Toggle Completions"
+      },
+      {
+        "command": "tiny-inline.switchProvider",
+        "title": "Tiny Inline: Switch Provider"
+      },
+      {
+        "command": "tiny-inline.testFim",
+        "title": "Tiny Inline: Test FIM Support"
+      },
+      {
+        "command": "tiny-inline.testProvider",
+        "title": "Tiny Inline: Test Provider"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "build": "esbuild ./src/extension.ts --bundle --platform=node --target=node18 --outfile=dist/extension.js --external:vscode --format=cjs",
+    "package": "npm run build && npx vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.75.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.4.0"
+  }
+}
